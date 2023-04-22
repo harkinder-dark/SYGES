@@ -1,2 +1,5 @@
-# SYGES
-SYsteme de Gestion Estudiantines
+#
+**SYGES**
+======================
+Système de Gestion Estudiantines
+
