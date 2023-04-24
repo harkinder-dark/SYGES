@@ -1,8 +1,10 @@
 /**
- * File : student.h
- * Directory : src/models/student.h
- * collaborators : ...
+ * File             : student.h
+ * Directory        : src/models/student.h
+ * Author           : Victor Doledji alias Hydromel
+ * Collaborators    : ...
 */
+
 #ifndef STUDENT_H
 #define STUDENT_H
 
@@ -10,19 +12,27 @@
 #include <stdlib.h>
 #include <time.h>
 
-
+/**
+ * struct contact
+ * indic    : indicatif
+ * number   : number without indic
+*/
 struct contact
 {
     char * indic;
-    long long number;
-}
+    long number;
+};
 
+/**
+ * struct person
+ * fullname
+ * contact : phone
+*/
 struct person
 {
     char *fullname;
     phone_t *contact;
-}
-
+};
 
 /**
  * struct student
@@ -49,5 +59,14 @@ struct student
 typedef struct person pers_t;
 typedef struct tm date_t;
 typedef struct contact phone_t;
+typedef struct student std_t;
+
+
+void stdAllView(std_t **head);
+void stdSingleView(char *pk, std_t **head);
+void stdAdd(std_t *entry, std_t **head);
+
+
+char *keyGenerator();
 
 #endif
