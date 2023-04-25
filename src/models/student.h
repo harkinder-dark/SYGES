@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
 /**
  * struct contact
@@ -65,8 +66,15 @@ typedef struct student std_t;
 void stdAllView(std_t **head);
 void stdSingleView(char *pk, std_t **head);
 void stdAdd(std_t *entry, std_t **head);
+void stdUpdate(char *pk, std_t modify, std_t **head);
+void stdRemove(char *pk, std_t **head);
 
 
-char *keyGenerator();
+std_t *stdFind(std_t *entry, std_t **head);
+char *stdkeyGenerator(std_t *entry);
+char ascii(int c);
+char * ascii_transform(char *str);
+char *toString(long n);
+char *_realloc(char *ptr, size_t size);
 
 #endif

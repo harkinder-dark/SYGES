@@ -9,7 +9,7 @@
 
 /**
  * stdAllView - show All student
- * head : std_t array, end with null
+ * @head: std_t array, end with null
 */
 void stdAllView(std_t **head)
 {
@@ -35,8 +35,8 @@ void stdAllView(std_t **head)
 
 /**
  * stdSingleView - show specific student
- * pk : primary key for student
- * head : std_t array, end with null
+ * @pk: primary key for student
+ * @head: std_t array, end with null
 */
 void stdSingleView(char *pk, std_t **head)
 {
@@ -63,24 +63,80 @@ void stdSingleView(char *pk, std_t **head)
         printf("NO STUDENT !!!");
 }
 
-
+/**
+ * stdAdd - fonction d'ajout
+ * @entry: etudiant a ajouter
+ * @head: liste des etudient deja ajouter
+*/
 void stdAdd(std_t *entry, std_t **head)
 {
     /**
      * les entrees viendront d'un espace graphique
     */
-    if (stdFind(entry) == NULL)
+    if (stdFind(entry, head) == NULL)
     {
-        entry->_pk = keyGenerator();
-
-
+        entry->_pk = stdkeyGenerator(entry);
+        // save(entry)
+        printf("ENTRY SUCCESSFULL !!!");
     }else {
         printf("ENRTY EXISTS !!!");
     }
-        
 }
 
-char *keyGenerator()
+/**
+ * stdUpdate - fonction de mis a jour
+ * @pk: cle primary de l'etudiant a modifier
+ * @modify: la nouvelle entree
+ * @head: liste des etudiant
+*/
+void stdUpdate(char *pk, std_t modify, std_t **head)
 {
-    
+    int i;
+    for (i = 0; (*head) = (*head) + i, (*head) != NULL; i++)
+    {
+        if (modify.contact == (*head)->contact  && strcmp((*head)->_pk, pk) != 0)
+        {
+            printf("MODIFICATION FAIL !!!");
+            return;
+        }
+
+        if (strcmp((*head)->_pk, pk) == 0)
+        {
+            (*head)->first_name = strdup(modify.first_name);
+            (*head)->last_name = strdup(modify.last_name);
+            (*head)->birthday = strdup(modify.birthday);
+            (*head)->contact->indic = strdup(modify.contact->indic); 
+            (*head)->contact->number = modify.contact->number;
+            (*head)->emergency->fullname = strdup(modify.emergency->fullname); 
+            (*head)->emergency->contact->indic = strdup(modify.emergency->contact->indic);
+            (*head)->emergency->contact->number = modify.emergency->contact->number;
+            (*head)->last_diploma = strdup(modify.last_diploma);
+            (*head)->nationality = strdp(modify.nationality);
+            // save(entry)
+            printf("MODIFICATION SUCESSFULL !!!");
+        }
+    }
+}
+
+/**
+ * stdRemove - suppression d'etudiant
+ * @pk: cle primaire
+ * @head: liste d'etudiant
+*/
+void stdRemove(char *pk, std_t **head)
+{
+    int i, j;
+    for (i = 0; (*head) = (*head) + i, (*head) != NULL; i++)
+    {
+        if (strcmp((*head)->_pk, pk) == 0)
+        {
+            for (j = i; (*head) = (*head) + j, (*head) + 1 != NULL; j++)
+                (*head) = (*head) + 1;
+            (*head) = NULL;
+
+            printf("STUDENT %s REMOVE SUCCESS !!!", pk);
+            return;
+        }
+    }
+    printf("NO STUDENT !!!");
 }
