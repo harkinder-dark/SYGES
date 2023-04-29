@@ -6,6 +6,19 @@
 */
 
 #include "student.h"
+/*
+int decimal[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+char string[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+
+char decimalChar(size_t n)
+{
+    int i;
+
+    for (i = 0; i < 10 ; i++)
+        if (n == decimal[i])
+            return string[i];
+    return "";
+}
 
 /**
  * stdFind - verifier si l'entree n'existe pas deja dans le base
@@ -17,10 +30,8 @@ std_t *stdFind(std_t *entry, std_t **head)
 {
     int i;
     for (i = 0; (*head) = (*head) + i, (*head) != NULL; i++)
-    {
-        if (strcmp((*head)->contact, entry->contact) == 0)
+        if (strcmp((*head)->contact->indic, entry->contact->indic) == 0 && strcmp(toString((*head)->contact->number), toString(entry->contact->number))== 0)
             return (*head);
-    }
     return NULL;
 }
 
@@ -36,7 +47,6 @@ char *stdkeyGenerator(std_t *entry)
      * le code ascii de  birthday  ex: 07/11/1999
      * enprenant 2 chiffire et si le dernier est seul on le prend ainsi
     */
-    char src[10] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
     int i, j;
 
     char *pk;
@@ -90,75 +100,116 @@ char *ascii_transform(char *str)
      * nous irons de 2 en 2 alors on s'assure de ne pas fais de segmentation fault
      * c'est juste une precaution , la boucle for elle meme y veille deja
     */
-    for (i = 0, j = 0; str[i] != '\0'; i = (str[i + 2] != '\0') ? i + 2 : -1, j++)
+    j = 0;
+    for (i = 0; i <= n; i++)
     {
-        if (i = -1) break;
-        src[0] = str[i];
-        src[1] = (str[i + 1] == '\0') ? '0' : str[i + 1];
-        dest[j] = ascii(atoi(src));
+        for (j = 0; j < n; j = j + 2)
+            dest[i] = (char) atoi(str[j] + str + j + 1));
     }
     dest[j] = '\0';
     return dest;
 }
 
 /**
- * digit - recupere la dizaine d'un nombre
+ * dizaine - recupere la dizaine d'un nombre
  * @n: number
  * Return: integer
 */
-int digit(long n)
+int dizaine(long long n) { return (n / 10); }
+
+/**
+ * digits - nombre de chiffre
+ * @n: nombre
+ * Return: size_t
+*/
+size_t digits(long long n)
 {
-return (n / 10);
+    int i;
+    long long p = n;
+
+    for (i = 0; p >= 10; i++)
+        p = dizaine(p);
+    
+    return i + 1;
 }
 
-char *toString(long n)
+char *toString(long long n)
 {
-    long m;
-    int i, j = -1;
-    size_t size = 2;
-    char *str = malloc(size * sizeof(char));
-    if (n >= 10)
+    char *str;
+    int i, j, k;
+    long long p;
+
+    if (n < 10)
     {
-        while(n >= 10)
-        {
-            m = n;
-            while(m >= 10)
-            {
-                m = digit(m);
-                i++;
-            }
-
-            if (j >= size) str = _realloc(str, size);
-            str[++j] = m + '0';
-            size = strlen(str);
-
-            while(i > 0)
-            {
-                m = m * 10;
-                i--;
-            }
-
-            n = n - m;
-        }
-
-        if (j >= size) str = _realloc(str, size);
-        str[++j] = n + '0';
-        size = strlen(str);
-    } else {
-        str[0] = n + '0';
-        str[1] = "";
+        str = malloc(sizeof(char) + 1);
+        *str = n + '0';
+        
+        *(str + 1) = '\0';
+        return str;
     }
+    
+    str = malloc(digits(n) * sizeof(char) + 1);
+    if (str == NULL)
+        return NULL;
+    
+    for (j = 0; n >= 10; j++)
+    {
+        p = n;
+
+        for (i = 0; p >= 10; i++)
+            p = dizaine(p);
+        
+        str[j] = p + '0';
+        for (i; i > 0; i--)
+            p *= 10;
+
+        n -= p;
+        if (digits(n) + 1 < digits(p))
+            for (i = 0; i < digits(p) - digits(n) - 1; i++)
+                str[++j] = '0';
+    }
+    str[j] = n + '0';
+    str[j + 1] = '\0';
+
     return str;
 }
 
+/**
+ * _realloc - re-allocation dynamique
+ * @ptr: chaine entrante
+ * @size: taille de la chaine entrante
+ * Return: char*
+*/
 char *_realloc(char *ptr, size_t size)
 {
     char *str;
     int i;
+
+    /*on verifie si l'entree n'est pas null*/
     if (ptr == NULL)
+    {
+        str = malloc(2 * sizeof(char));
+        if (str == NULL)
+            return NULL;
+        
+        return str;
+    }
+
+    /*on verifie si size n'est pas null*/
+    if (size == 0)
+    {
+        free(ptr);
         return NULL;
+    }
+
+    /*nouvelle allocation*/
     str = malloc((size + 2) * sizeof(char));
+    if (str == NULL)
+        return NULL;
+
+    /*copie des donnees vers la nouvelle variable*/
     for (i = 0; i < size; i++)
         str[i] = ptr[i];
+
     return str;
 }

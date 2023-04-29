@@ -13,6 +13,8 @@
 #include <time.h>
 #include <string.h>
 
+typedef struct tm date_t;
+
 /**
  * struct contact
  * indic    : indicatif
@@ -20,9 +22,11 @@
 */
 struct contact
 {
-    char * indic;
+    char *indic;
     long number;
 };
+
+typedef struct contact phone_t;
 
 /**
  * struct person
@@ -34,6 +38,8 @@ struct person
     char *fullname;
     phone_t *contact;
 };
+
+typedef struct person pers_t;
 
 /**
  * struct student
@@ -57,9 +63,6 @@ struct student
     char *last_diploma;
 };
 
-typedef struct person pers_t;
-typedef struct tm date_t;
-typedef struct contact phone_t;
 typedef struct student std_t;
 
 
@@ -73,8 +76,13 @@ void stdRemove(char *pk, std_t **head);
 std_t *stdFind(std_t *entry, std_t **head);
 char *stdkeyGenerator(std_t *entry);
 char ascii(int c);
-char * ascii_transform(char *str);
-char *toString(long n);
+char *ascii_transform(char *str);
+
+
 char *_realloc(char *ptr, size_t size);
+char *toString(long long n);
+size_t digits(long long n);
+char letter_ascii(int c);
+int dizaine(long long n);
 
 #endif
