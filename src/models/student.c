@@ -48,7 +48,7 @@ void stdSingleView(char *pk, stdlink **head)
     
     for (i = 0; (*head)->data != NULL; i++)
     {
-        if ((*head)->data->_pk == pk)
+        if (strcmp((*head)->data->_pk, pk) == 0)
         {
             res = 1;
             printf("\nFirst Name    : %s\n", (*head)->data->first_name);
@@ -59,7 +59,7 @@ void stdSingleView(char *pk, stdlink **head)
             printf("Contact         : %s %ld\n", (*head)->data->contact->indic, (*head)->data->contact->number);
             printf("Last Diploma    : %s\n\n", (*head)->data->last_diploma);
 
-            break;
+            return;
         }
 
         (*head) = (*head)->next;
@@ -127,7 +127,7 @@ bool stdUpdate(char *pk, std_t *modify, stdlink **head)
 
     for (i = 0; (*head)->next != NULL; i++)
     {
-        if (modify->contact == (*head)->data->contact  && strcmp((*head)->data->_pk, pk) != 0)
+        if (strcmp(modify->contact, (*head)->data->contact) == 0  && strcmp((*head)->data->_pk, pk) != 0)
         {
             printf("MODIFICATION FAIL !!!");
             return false;
