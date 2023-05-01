@@ -18,11 +18,14 @@ std_t *stdFind(std_t *entry, stdlink **head)
 {
     int i;
 
+    if (entry == NULL || head == NULL || *head == NULL)
+        return NULL;
+    
     for (i = 0; (*head)->next != NULL; i++)
     {
         if (strcmp((*head)->data->contact->indic, entry->contact->indic) == 0 &&
-            strcmp(toString((*head)->data->contact->number), toString(entry->contact->number))== 0)
-            return (*head);
+            strcmp(toString((*head)->data->contact->number), toString(entry->contact->number)) == 0)
+            return (*head)->data;
 
         (*head) = (*head)->next;
     }

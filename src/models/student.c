@@ -90,18 +90,18 @@ bool stdAdd(std_t *entry, stdlink **head)
         return false;
     }
 
-    entry->_pk = entry->_pk = stdkeyGenerator(entry);
+    entry->_pk = stdkeyGenerator(entry);
     new = malloc(sizeof(stdlink));
+    if (new == NULL)
+        return false;
     new->data = entry;
 
     if (head == NULL || *head == NULL)
         new->next = NULL;
     else
-    {
         new->next = *head;
-        *head = new;
-    }
     
+    *head = new;
     printf("ENTRY SUCCESSFULL !!!");
     return true; 
 }
@@ -137,14 +137,14 @@ bool stdUpdate(char *pk, std_t *modify, stdlink **head)
         {
             (*head)->data->first_name = strdup(modify->first_name);
             (*head)->data->last_name = strdup(modify->last_name);
-            (*head)->data->birthday = strdup(modify->birthday);
+            (*head)->data->birthday = modify->birthday;
             (*head)->data->contact->indic = strdup(modify->contact->indic); 
             (*head)->data->contact->number = modify->contact->number;
             (*head)->data->emergency->fullname = strdup(modify->emergency->fullname); 
             (*head)->data->emergency->contact->indic = strdup(modify->emergency->contact->indic);
             (*head)->data->emergency->contact->number = modify->emergency->contact->number;
             (*head)->data->last_diploma = strdup(modify->last_diploma);
-            (*head)->data->nationality = strdp(modify->nationality);
+            (*head)->data->nationality = strdup(modify->nationality);
             // save(entry)
             printf("MODIFICATION SUCESSFULL !!!");
             return true;

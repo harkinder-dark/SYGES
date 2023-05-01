@@ -36,24 +36,45 @@ bool testAsciiTransform()
     return (strlen(ascii_transform(str)) <= strlen(str)) ? true : false;
 }
 
-bool (*tester[])() = { testRealloc, testDizaine, testDigits, testToStrings, testLetterAscii,
-                        testAsciiTransform, NULL};
-
 bool testAdd()
 {
     std_t *std1, *std2, *std3;
+    pers_t *person;
 
+    person = malloc(sizeof(pers_t));
+    if (person == NULL)
+        return false;
+    
+    person->fullname = "Henrish Anderson";
+    person->contact->indic = "+1 (451)";
+    person->contact->number = 45213877;
+    
+    std1 = malloc(sizeof(std_t));
+    if (std1 == NULL)
+        return false;
+    
     std1->first_name = "Hydromel Victor";
     std1->last_name = "Vaddely";
-    
+    std1->birthday->tm_year = 1990;
+    std1->birthday->tm_mon = 5;
+    std1->birthday->tm_mday = 14;
+    std1->contact->indic = "+228";
+    std1->contact->number = 91254635;
+    std1->last_diploma = "bac";
+    std1->emergency = person;
+    std1->nationality = "togolaise";
+
+    printf("dddddddddddddddddddd");
+    return stdAdd(std1, head);
 }
 
-
+bool (*tester[])() = { testRealloc, testDizaine, testDigits, testToStrings, testLetterAscii,
+                       testAsciiTransform, testAdd, NULL};
 
 int main()
 {
     int i;
-    std_t **head = NULL;
+    head = NULL;
 
     for (i = 0; tester[i] != NULL; i++)
     {

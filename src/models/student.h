@@ -24,8 +24,8 @@ typedef struct tm date_t;
 */
 struct contact
 {
+    long long number;
     char *indic;
-    long number;
 };
 
 typedef struct contact phone_t;
@@ -37,8 +37,8 @@ typedef struct contact phone_t;
 */
 struct person
 {
-    char *fullname;
     phone_t *contact;
+    char *fullname;
 };
 
 typedef struct person pers_t;
@@ -55,16 +55,15 @@ typedef struct person pers_t;
 */
 struct student
 {
+    date_t *birthday;
+    phone_t *contact;
+    pers_t *emergency;
     char *_pk;
     char *first_name;
     char *last_name;
-    date_t *birthday;
     char *nationality;
-    pers_t *emergency;
-    phone_t *contact;
     char *last_diploma;
 };
-
 
 typedef struct student std_t;
 
