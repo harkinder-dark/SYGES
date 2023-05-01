@@ -12,13 +12,15 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <stdbool.h>
+#include "const.h"
 
 typedef struct tm date_t;
 
 /**
  * struct contact
- * indic    : indicatif
- * number   : number without indic
+ * @indic: indicatif
+ * @number: number without indic
 */
 struct contact
 {
@@ -30,8 +32,8 @@ typedef struct contact phone_t;
 
 /**
  * struct person
- * fullname
- * contact : phone
+ * @fullname: nom complet
+ * @contact: phone
 */
 struct person
 {
@@ -43,13 +45,13 @@ typedef struct person pers_t;
 
 /**
  * struct student
- * _pk              : primary key
- * first_name       : first name of student
- * last_name        : last name of student
- * birthday         : birthday of student
- * nationality      : country origin of stuydent
- * contact          : phone numbers
- * last diploma     : last academy diploma
+ * @_pk: primary key
+ * @first_name: first name of student
+ * @last_name: last name of student
+ * @birthday: birthday of student
+ * @nationality: country origin of stuydent
+ * @contact: phone numbers
+ * @last_diploma: last academy diploma
 */
 struct student
 {
@@ -63,23 +65,36 @@ struct student
     char *last_diploma;
 };
 
+
 typedef struct student std_t;
 
+/**
+ * struct stdlinked
+ * @data: les données
+ * @next: la donnée suivante
+*/
+typedef struct stdlinked
+{
+    std_t * data;
+    struct stdlinked *next;
+} stdlink;
 
-void stdAllView(std_t **head);
-void stdSingleView(char *pk, std_t **head);
-void stdAdd(std_t *entry, std_t **head);
-void stdUpdate(char *pk, std_t modify, std_t **head);
-void stdRemove(char *pk, std_t **head);
 
 
-std_t *stdFind(std_t *entry, std_t **head);
-char *stdkeyGenerator(std_t *entry);
-char ascii(int c);
-char *ascii_transform(char *str);
+void stdAllView(stdlink **head);
+void stdSingleView(char *pk, stdlink **head);
+bool stdAdd(std_t *entry, stdlink **head);
+bool stdUpdate(char *pk, std_t *modify, stdlink **head);
+bool stdRemove(char *pk, stdlink **head);
+
+
+std_t *stdFind(std_t *entry, stdlink **head);
+
 
 
 char *_realloc(char *ptr, size_t size);
+char *stdkeyGenerator(std_t *entry);
+char *ascii_transform(char *str);
 char *toString(long long n);
 size_t digits(long long n);
 char letter_ascii(int c);

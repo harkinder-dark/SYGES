@@ -6,19 +6,7 @@
 */
 
 #include "student.h"
-/*
-int decimal[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-char string[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
-char decimalChar(size_t n)
-{
-    int i;
-
-    for (i = 0; i < 10 ; i++)
-        if (n == decimal[i])
-            return string[i];
-    return "";
-}
 
 /**
  * stdFind - verifier si l'entree n'existe pas deja dans le base
@@ -26,14 +14,22 @@ char decimalChar(size_t n)
  * @head: tableau de tous les entree
  * Return: std_t
 */
-std_t *stdFind(std_t *entry, std_t **head)
+std_t *stdFind(std_t *entry, stdlink **head)
 {
     int i;
-    for (i = 0; (*head) = (*head) + i, (*head) != NULL; i++)
-        if (strcmp((*head)->contact->indic, entry->contact->indic) == 0 && strcmp(toString((*head)->contact->number), toString(entry->contact->number))== 0)
+
+    for (i = 0; (*head)->next != NULL; i++)
+    {
+        if (strcmp((*head)->data->contact->indic, entry->contact->indic) == 0 &&
+            strcmp(toString((*head)->data->contact->number), toString(entry->contact->number))== 0)
             return (*head);
+
+        (*head) = (*head)->next;
+    }
+
     return NULL;
 }
+
 
 /**
  * stdkeyGenerator - generateur de cle primaire
@@ -81,7 +77,7 @@ char letter_ascii(int c)
 */
 char *ascii_transform(char *str)
 {
-    char *dest, src[2];
+    char *dest;
     int i, j;
     size_t n;
 
@@ -89,8 +85,12 @@ char *ascii_transform(char *str)
         return NULL;
     
     n = strlen(str);
-    /* la nouvelle chaine fera la moitier de celle entree en parametre*/
-    n = ((n & 1) == 0) ? n/2 : n/2 + 1;
+
+    /** 
+     * la nouvelle chaine fera la moitier de celle entree en parametre
+     * et considerons la logueur pair
+    */
+    n = n/2;
     
     dest = malloc(n * sizeof(char) + 1);
     if (dest == NULL)
@@ -101,10 +101,12 @@ char *ascii_transform(char *str)
      * c'est juste une precaution , la boucle for elle meme y veille deja
     */
     j = 0;
-    for (i = 0; i <= n; i++)
+    for (i = 0; i < n; i++)
     {
-        for (j = 0; j < n; j = j + 2)
-            dest[i] = (char) atoi(str[j] + str + j + 1));
+        dest[i] = (char)(((int)str[j]) * 10 + (int)str[++j]);
+
+        if (str[j + 1] != '\0')
+            j++;
     }
     dest[j] = '\0';
     return dest;
@@ -139,6 +141,9 @@ char *toString(long long n)
     int i, j, k;
     long long p;
 
+    /**
+     * lorsque n est compris entre 0 et 9
+    */
     if (n < 10)
     {
         str = malloc(sizeof(char) + 1);
@@ -152,22 +157,37 @@ char *toString(long long n)
     if (str == NULL)
         return NULL;
     
+    /**
+     * lorsque n est superieur ou egal a 10 
+    */
     for (j = 0; n >= 10; j++)
     {
+        /* afin de ne pas perdre la valeur de n*/
         p = n;
-
+        
+        /* on trouve l'element le plus a gauche*/
         for (i = 0; p >= 10; i++)
             p = dizaine(p);
         
+        /* on le traduit en lettre puis on le stock dans la chaine*/
         str[j] = p + '0';
+
+        /* on ajout autant de zero a droite du nombre p afin de le supprimer de n*/
         for (i; i > 0; i--)
             p *= 10;
 
         n -= p;
+
+        /** 
+         * si le nombre de chiffre que comporte le nombre n ajouter a 1 est inferieur
+         * au nombre de chiffre que contient p alors il existe un zero qui a ete
+         * eliminer par la soutraction de n-p alors on l'ajoute
+         */
         if (digits(n) + 1 < digits(p))
             for (i = 0; i < digits(p) - digits(n) - 1; i++)
                 str[++j] = '0';
     }
+    /* on ajouter le chiffre le plus a droite */
     str[j] = n + '0';
     str[j + 1] = '\0';
 

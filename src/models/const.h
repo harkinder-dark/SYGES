@@ -1,0 +1,14 @@
+#ifndef CONST_H
+#define CONST_H
+
+#define STRINGSLITTLE 8
+#define STRINGSHORT 16
+#define STRINGSMIDDLE 32
+#define STRINGSLONG 64
+#define STRINGSBIGSHORT 132
+#define STRINGSBIGMID 256
+#define LARG 1024
+#define SUPRA 1024 * 8
+#define EXTRA 1024 * 1024
+
+#endif

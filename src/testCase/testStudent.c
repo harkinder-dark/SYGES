@@ -1,5 +1,6 @@
 #include "../models/syges.h"
-#include <stdbool.h>
+
+stdlink **head;
 
 bool testRealloc()
 {
@@ -31,20 +32,32 @@ bool testLetterAscii()
 
 bool testAsciiTransform()
 {
-    char *str = "9975770423031996";
-    printf("%s\n", ascii_transform(str));
-    return true;
+    char *str = "40954296552959";
+    return (strlen(ascii_transform(str)) <= strlen(str)) ? true : false;
 }
 
-bool (*tester[])() = {testRealloc, testDizaine, testDigits, testToStrings, testLetterAscii, NULL};
+bool (*tester[])() = { testRealloc, testDizaine, testDigits, testToStrings, testLetterAscii,
+                        testAsciiTransform, NULL};
+
+bool testAdd()
+{
+    std_t *std1, *std2, *std3;
+
+    std1->first_name = "Hydromel Victor";
+    std1->last_name = "Vaddely";
+    
+}
+
+
 
 int main()
 {
     int i;
+    std_t **head = NULL;
+
     for (i = 0; tester[i] != NULL; i++)
     {
         printf("%s\n", tester[i]() ? "TEST SUCCESS" : "TEST FAIL");
     }
-    testAsciiTransform();
     return 0;
 }
