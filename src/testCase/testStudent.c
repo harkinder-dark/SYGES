@@ -63,13 +63,18 @@ bool testAdd()
     std1->last_diploma = "bac";
     std1->emergency = person;
     std1->nationality = "togolaise";
-
-    printf("dddddddddddddddddddd");
+    
     return stdAdd(std1, head);
 }
 
-bool (*tester[])() = { testRealloc, testDizaine, testDigits, testToStrings, testLetterAscii,
-                       testAsciiTransform, testAdd, NULL};
+bool (*tester[])() = { 
+    testRealloc,
+    testDizaine,
+    testDigits,
+    testToStrings,
+    testLetterAscii,
+    testAsciiTransform,
+    NULL};
 
 int main()
 {

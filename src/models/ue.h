@@ -12,18 +12,16 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include "const.h"
 
 /**
  * struct ue - models ue
  * @level: niveau LMD
- * @name: code de l'ue
+ * @code: code de l'ue
  * @weight: coefficient
 */
 struct ue {
-    char *__pk;
+    char *code;
     char *level;
-    char *name;
     int weight;
 };
 
@@ -36,5 +34,12 @@ struct uelinked
 };
 
 typedef struct uelinked uelink;
+
+ue_t *ueFind(ue_t *entry, uelink **head);
+
+
+void ueAllView(uelink **head);
+void ueSingleView(char *pk, uelink **head);
+bool ueAdd(ue_t *entry, uelink **head);
 
 #endif

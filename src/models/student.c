@@ -13,10 +13,6 @@
 */
 void stdAllView(stdlink **head)
 {
-    /**
-     * en supposant que head est un tableau de std_t dont l'elment final est null
-     * ex: head = {..., ..., NULL}
-    */
     int i;
     if (head == NULL || (*head) == NULL)
         return;
@@ -25,7 +21,7 @@ void stdAllView(stdlink **head)
     {
         printf("\nFirst Name    : %s\n", (*head)->data->first_name);
         printf("Last Name       : %s\n", (*head)->data->last_name);
-        printf("Birthday        : %s\n", (*head)->data->birthday);
+        printf("Birthday        : %s\n", (*head)->data->birthday); // affichage en utilisant strftime
         printf("Nationality     : %s\n", (*head)->data->nationality);
         printf("Emergency       : %s\n", (*head)->data->emergency);
         printf("Contact         : %s %ld\n", (*head)->data->contact->indic, (*head)->data->contact->number);
@@ -73,6 +69,7 @@ void stdSingleView(char *pk, stdlink **head)
  * stdAdd - fonction d'ajout
  * @entry: etudiant a ajouter
  * @head: liste des etudient deja ajouter
+ * Return: true or false
 */
 bool stdAdd(std_t *entry, stdlink **head)
 {
@@ -80,7 +77,7 @@ bool stdAdd(std_t *entry, stdlink **head)
 
     if (entry == NULL)
     {
-        printf("ENTRY FAILS !!!");
+        printf("YOUR NEW ENTRY IS NULL !!!");
         return false;
     }
 
@@ -111,6 +108,7 @@ bool stdAdd(std_t *entry, stdlink **head)
  * @pk: cle primary de l'etudiant a modifier
  * @modify: la nouvelle entree
  * @head: liste des etudiant
+ * Return: true or false
 */
 bool stdUpdate(char *pk, std_t *modify, stdlink **head)
 {
@@ -127,12 +125,6 @@ bool stdUpdate(char *pk, std_t *modify, stdlink **head)
 
     for (i = 0; (*head)->next != NULL; i++)
     {
-        if (strcmp(modify->contact, (*head)->data->contact) == 0  && strcmp((*head)->data->_pk, pk) != 0)
-        {
-            printf("MODIFICATION FAIL !!!");
-            return false;
-        }
-
         if (strcmp((*head)->data->_pk, pk) == 0)
         {
             (*head)->data->first_name = strdup(modify->first_name);
@@ -145,13 +137,14 @@ bool stdUpdate(char *pk, std_t *modify, stdlink **head)
             (*head)->data->emergency->contact->number = modify->emergency->contact->number;
             (*head)->data->last_diploma = strdup(modify->last_diploma);
             (*head)->data->nationality = strdup(modify->nationality);
-            // save(entry)
+
             printf("MODIFICATION SUCESSFULL !!!");
             return true;
         }
         (*head) = (*head)->next;
     }
 
+    printf("MODIFICATION FAIL !!!");
     return false;
 }
 
@@ -159,11 +152,12 @@ bool stdUpdate(char *pk, std_t *modify, stdlink **head)
  * stdRemove - suppression d'etudiant
  * @pk: cle primaire
  * @head: liste d'etudiant
+ * Return: true or false
 */
 bool stdRemove(char *pk, stdlink **head)
 {
     int i, j;
-
+    stdlink *del;
     if (pk == NULL || head == NULL || *head == NULL)
     {
         printf("NO STUDENT !!!");
@@ -178,7 +172,31 @@ bool stdRemove(char *pk, stdlink **head)
         return false;
     }
     
+    del = (*head)->next;
     (*head)->next = (*head)->next->next;
+    free(del);
     printf("STUDENT %s REMOVE SUCCESS !!!", pk);
+    return true;
+}
+
+/**
+ * stdAllRemove - all remove
+ * @head: list
+ * Return: true or false
+*/
+bool stdAllRemove(stdlink **head)
+{
+    stdlink *del;
+    int i;
+    if (head == NULL)
+        return true;
+    for (i = 0; (*head)->next != NULL; i++)
+    {
+        del = (*head);
+        (*head) = (*head)->next;
+        *head = (*head);
+        free(del);
+    }
+    free((*head));
     return true;
 }

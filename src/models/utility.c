@@ -6,6 +6,7 @@
 */
 
 #include "student.h"
+#include "ue.h"
 
 
 /**
@@ -23,8 +24,15 @@ std_t *stdFind(std_t *entry, stdlink **head)
     
     for (i = 0; (*head)->next != NULL; i++)
     {
-        if (strcmp((*head)->data->contact->indic, entry->contact->indic) == 0 &&
-            strcmp(toString((*head)->data->contact->number), toString(entry->contact->number)) == 0)
+        /* les element unique d'un etudiant autre que sa cle primaire c'est son phone */
+        if (
+            strcmp(
+                (*head)->data->contact->indic,
+                entry->contact->indic
+                ) == 0
+            &&
+            (*head)->data->contact->number == entry->contact->number
+            )
             return (*head)->data;
 
         (*head) = (*head)->next;
@@ -33,6 +41,26 @@ std_t *stdFind(std_t *entry, stdlink **head)
     return NULL;
 }
 
+/**
+ * ueFind - recherche ue
+ * @entry: new eu
+ * @head: list
+*/
+ue_t *ueFind(ue_t *entry, uelink **head)
+{
+    int i;
+    if (entry == NULL || head == NULL || *head == NULL)
+        return NULL;
+    
+    for (i = 0; (*head)->next != NULL; i++)
+    {
+        if (strcmp((*head)->data->code, entry->code) == 0)
+            return (*head)->data;
+        
+        (*head) = (*head)->next;
+    }
+    return NULL;
+}
 
 /**
  * stdkeyGenerator - generateur de cle primaire
@@ -41,37 +69,38 @@ std_t *stdFind(std_t *entry, stdlink **head)
 */
 char *stdkeyGenerator(std_t *entry)
 {
-    /**
-     * le code ascii de contact.number + 
-     * le code ascii de  birthday  ex: 07/11/1999
-     * enprenant 2 chiffire et si le dernier est seul on le prend ainsi
-    */
     int i, j;
 
     char *pk;
-    /* je constitue une chaine de format jjmmaaaanumber ou 
-    jj = jour du mois
-    mm = mois de l'annee
-    aaaa = l'annee
-    qui a leur tour sont la date de naissace de l'etudiant
-    number = le numero telephonique sans l'indicatif
-    */
-    pk = strcat(toString(entry->birthday->tm_mday), toString(entry->birthday->tm_mon));
-    pk = strcat(pk, toString(entry->birthday->tm_year));
-    pk = strcat(pk, toString(entry->contact->number));
+    
+    pk = strcat(
+        // birthday + phone
+        toString(entry->birthday->tm_mday),
+        strcat(
+            // (mois + année) de naissance + phone
+            toString(entry->birthday->tm_mon),
+            strcat(
+                // année de naissance + phone
+                toString(entry->birthday->tm_year),
+                strcat(
+                    // phone = indicatif + numero
+                    entry->contact->indic,
+                    toString(entry->contact->number)
+                )
+            )
+        )
+    );
 
     return ascii_transform(pk);
 }
+
 
 /**
  * letter_ascii - transforme un int en son code letterascii
  * @c: integer
  * Return: char
 */
-char letter_ascii(int c)
-{
-    return (char) c;
-}
+char letter_ascii(int c) { return (char) c; }
 
 /**
  * ascii_transform - transform un string en son correspondant letter_ascii par pair de caractere

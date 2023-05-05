@@ -8,6 +8,10 @@
 #include "ue.h"
 
 
+/**
+ * ueAllView - affichage de tout les eu
+ * @head: liste des eu
+*/
 void ueAllView(uelink **head)
 {
     int i;
@@ -16,7 +20,7 @@ void ueAllView(uelink **head)
     
     for (i = 0; (*head)->next != NULL; i++)
     {
-        printf("Code        :\n", (*head)->data->name);
+        printf("Code        :\n", (*head)->data->code);
         printf("Niveau      :\n", (*head)->data->level);
         printf("coefficient :\n", (*head)->data->weight);
         
@@ -24,6 +28,10 @@ void ueAllView(uelink **head)
     }
 }
 
+/**
+ * ueSingleView - affichage d'une eu
+ * @head: liste des ue
+*/
 void ueSingleView(char *pk, uelink **head)
 {
     int i, res = 0;
@@ -32,9 +40,9 @@ void ueSingleView(char *pk, uelink **head)
     
     for (i = 0; (*head)->next != NULL; i++)
     {
-        if (strcmp(pk, (*head)->data->__pk) == 0)
+        if (strcmp(pk, (*head)->data->code) == 0)
         {
-            printf("Code        :\n", (*head)->data->name);
+            printf("Code        :\n", (*head)->data->code);
             printf("Niveau      :\n", (*head)->data->level);
             printf("coefficient :\n", (*head)->data->weight);
 
@@ -48,7 +56,12 @@ void ueSingleView(char *pk, uelink **head)
         printf("FREE !!!");
 }
 
-
+/**
+ * ueAdd - ajout d'une nouvelle ue
+ * @entry: la nouvelle ue
+ * @head: list des eu
+ * Return: true or false
+*/
 bool ueAdd(ue_t *entry, uelink **head)
 {
     uelink *new;
@@ -65,7 +78,6 @@ bool ueAdd(ue_t *entry, uelink **head)
         return false;
     }
 
-    entry->__pk = uekeyGenerator(entry);
     new = malloc(sizeof(uelink));
     if (new == NULL)
         return false;
@@ -81,8 +93,14 @@ bool ueAdd(ue_t *entry, uelink **head)
     return true;
 }
 
-
-bool stdUpdate(char *pk, ue_t *modify, uelink **head)
+/**
+ * ueUpdate - mis a jour
+ * @pk: new code
+ * @modify: modified ue
+ * @head: list
+ * Return: true or false
+*/
+bool ueUpdate(char *pk, ue_t *modify, uelink **head)
 {
     int i;
 
@@ -93,29 +111,16 @@ bool stdUpdate(char *pk, ue_t *modify, uelink **head)
     }
 
     if (head == NULL || *head == NULL)
-        return stdAdd(modify, head);
+        return ueAdd(modify, head);
 
     for (i = 0; (*head)->next != NULL; i++)
     {
-        if (strcmp(modify->contact, (*head)->data->contact) == 0  && strcmp((*head)->data->_pk, pk) != 0)
+        if (strcmp((*head)->data->code, pk) == 0)
         {
-            printf("MODIFICATION FAIL !!!");
-            return false;
-        }
+            (*head)->data->code = strdup(modify->code);
+            (*head)->data->level = strdup(modify->level);
+            (*head)->data->weight = modify->weight;
 
-        if (strcmp((*head)->data->_pk, pk) == 0)
-        {
-            (*head)->data->first_name = strdup(modify->first_name);
-            (*head)->data->last_name = strdup(modify->last_name);
-            (*head)->data->birthday = modify->birthday;
-            (*head)->data->contact->indic = strdup(modify->contact->indic); 
-            (*head)->data->contact->number = modify->contact->number;
-            (*head)->data->emergency->fullname = strdup(modify->emergency->fullname); 
-            (*head)->data->emergency->contact->indic = strdup(modify->emergency->contact->indic);
-            (*head)->data->emergency->contact->number = modify->emergency->contact->number;
-            (*head)->data->last_diploma = strdup(modify->last_diploma);
-            (*head)->data->nationality = strdup(modify->nationality);
-            // save(entry)
             printf("MODIFICATION SUCESSFULL !!!");
             return true;
         }
@@ -123,4 +128,57 @@ bool stdUpdate(char *pk, ue_t *modify, uelink **head)
     }
 
     return false;
+}
+
+/**
+ * ueRemove - single remove
+ * @pk: code
+ * @head: list
+ * Return: true or false
+*/
+bool ueRemove(char *pk, uelink **head)
+{
+    int i, j;
+    uelink *del;
+    if (pk == NULL || head == NULL || *head == NULL)
+    {
+        printf("NO LEARNING UNITY !!!");
+        return false;
+    }
+
+    for (i = 0; (*head)->next != NULL || strcmp((*head)->next->data->code, pk) == 0 ; i++);
+
+    if ((*head)->next == NULL)
+    {
+        printf("NO LEARNING UNITY !!!");
+        return false;
+    }
+    
+    del = (*head)->next;
+    (*head)->next = (*head)->next->next;
+    free(del);
+    printf("LEARNING UNITY %s REMOVE SUCCESS !!!", pk);
+    return true;
+}
+
+/**
+ * ueAllRemove - all remove
+ * @head: list
+ * Return: true or false
+*/
+bool ueAllRemove(uelink **head)
+{
+    uelink *del;
+    int i;
+    if (head == NULL)
+        return true;
+    for (i = 0; (*head)->next != NULL; i++)
+    {
+        del = (*head);
+        (*head) = (*head)->next;
+        *head = (*head);
+        free(del);
+    }
+    free((*head));
+    return true;
 }
