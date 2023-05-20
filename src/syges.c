@@ -1,4 +1,4 @@
-#include "models/syges.h"
+#include "syges.h"
 
 /**
  * main - la fonction principal l'entree du compilateur

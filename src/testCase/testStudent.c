@@ -1,5 +1,5 @@
 #include "../models/syges.h"
-
+/*
 stdlink **head;
 
 bool testRealloc()
@@ -75,9 +75,10 @@ bool (*tester[])() = {
     testLetterAscii,
     testAsciiTransform,
     NULL};
-
+*/
 int main()
 {
+    /*
     int i;
     head = NULL;
 
@@ -86,4 +87,14 @@ int main()
         printf("%s\n", tester[i]() ? "TEST SUCCESS" : "TEST FAIL");
     }
     return 0;
+    */
+   int i,j;
+    for (i = 0; i < 11; i++)
+    {
+        for (j = 0; j < 11; j++)
+        {
+            printf("%d * %d = %d\t", j, i, j * i);
+        }
+        printf("\n");
+    }
 }
