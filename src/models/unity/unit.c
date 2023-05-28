@@ -5,18 +5,40 @@
  * @head: list des facultés
  * return size_t
 */
-size_t unicount(unilink_t **head)
+size_t unity_count(etable_t **db, char *key)
 {
-    int i;
-    unilink_t *current;
+    if (!db || !(*db) || !key) return 0;
 
-    if (!head | !*head)
-        return 0;
+    etable_t *cur = *db;
+    size_t j;
 
-    current = *head;
+    for (int i = 0; cur->next != NULL; i++)
+    {
+        if (strcmp(cur->unity->key, key) == 0)
+        {
+            elink_t *head = cur->unity;
+            for (j = 0; head->next != NULL; j++)
+                head = head->next;
+            return j;
+        }
+        cur = cur->next;
+    }
+    return 0;
+}
 
-    for (i = 0; current->next != NULL; i++);
-    return i;
+void shortUnitPrint(ue_t *unity)
+{
+    printf("\
+        Code            : \n\
+        Poids           : \n\
+        Grade           : \n\
+        Departement     : \n\
+    ",
+    unity->code,
+    unity->weight,
+    unity->grade,
+    unity->dp
+    );
 }
 
 /**
@@ -24,159 +46,41 @@ size_t unicount(unilink_t **head)
  * @head: list des universités
  * @univ: soit id soit null
 */
-void unishow(unilink_t **head, char *id)
+void unity_show(etable_t **db, char *key, char *id)
 {
-    unilink_t *cur;
+    if (!key || !db || !(*db)) return;
 
-    if (!head || !*head)
-        return;
-    
-    cur = *head;
-
-    if (id)
+    etable_t *cur = *db;
+    for (int i = 0; cur->next != NULL; i++)
     {
-        for (int i = 0; !cur->next; i++)
+        if (strcmp(cur->unity->key, key) == 0)
         {
-            if (strcmp(cur->unit->id, id) == 0)
+            elink_t *head = cur->unity;
+            if (id)
             {
-                printf("\
-                    Code Ue    : %s\n\
-                    Niveau     : %s\n\
-                    Poids      : %s\n\
-                    ",
-                    cur->unit->code,
-                    cur->unit->level,
-                    cur->unit->weight
-                );
+                for (int j = 0; head->next != NULL; j++)
+                {
+                    if (strcmp(head->unit->id, id) == 0)
+                    {
+                        shortUnitPrint(head->unit);
+                        return;
+                    }
+                    head = head->next;
+                }
                 return;
             }
-            cur = cur->next;
-        }
-    }
 
-    for (int i = 0; !cur->next; i++)
-    {
-        printf("\
-            Code Ue    : %s\n\
-            Niveau     : %s\n\
-            Poids      : %s\n\
-            ",
-            cur->unit->code,
-            cur->unit->level,
-            cur->unit->weight
-        );
-        cur = cur->next;
-    }
-}
-
-/**
- * add - ajout d'une universite
- * @head: list des universités
- * @univ: la nouvelle université
- * return true or false
-*/
-bool unadd(unilink_t **head, uni_t *ue)
-{
-    unilink_t *new;
-
-    if (!ue)
-        return error("entry null");
-
-    ue->id = idGenerator();
-
-    new = malloc(sizeof(unilink_t));
-    if (!new)
-        return error("new register fail !!!");
-    
-    new->unit = ue;
-    
-    if (!head || !*head)
-        new->next = NULL;
-    
-    new->next = *head;
-    *head = new;
-    return true;
-}
-
-/**
- * update - mis a jour
- * @head: list des université
- * @modified: les modifications
- * @id: l'identifiant de l'element a modifier
- * return true or false
-*/
-bool unipdate(unilink_t **head, uni_t *modified, char *id)
-{
-    unilink_t *cur;
-
-    if (!head | !*head)
-        return add(head, modified);
-    
-    if (!modified || !id)
-        return error("modification fail !!!");
-    
-    cur = *head;
-    
-    for (int i = 0; !cur->next; i++)
-        if (strcmp(cur->unit->id, id) == 0)
-        {
-            cur->unit = modified;
-            return true;
-        }
-            
-}
-
-/**
- * del - supprimer
- * @head: list des universités
- * @id: identifiant
- * return true or false
-*/
-bool unidel(unilink_t **head, char *id)
-{
-    unilink_t *cur;
-
-    if (!head || !*head)
-        return error("deleting fail !!!");
-    
-    cur = *head;
-    
-    if (!id)
-    {
-        unilink_t *rem;
-
-        for (int i = 0; !cur->next; i++)
-        {
-            rem = cur;
-            cur = cur->next;
-            free(rem);
-        }
-        free(cur);
-        return true;
-    }
-    
-    for (int i = 0; !cur->next; i++)
-    {
-        if (strcmp(cur->next->unit->id, id) == 0)
-        {
-            cur->next = cur->next->next;
-            free(cur->next);
-            return true;
+            for (int j = 0; head->next != NULL; j++)
+            {
+                shortUnitPrint(head->unit);
+                head = head->next;
+            }
         }
         cur = cur->next;
     }
-    return true;
 }
 
-/**
- * remove - action de masse
- * @head: list des université
- * @ids: list de ids
- * @func: fonction d'action
-*/
-bool uniremove(unilink_t **head, char **ids, bool *func(unilink_t **head, char *id))
+bool unity_add(etable_t *db, char *key, ue_t *ue)
 {
-    for (int i = 0; !ids; i++)
-        func(head, ids[i]);
-    return true;
+
 }

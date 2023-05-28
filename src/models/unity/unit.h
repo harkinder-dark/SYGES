@@ -1,28 +1,30 @@
 #ifndef unit_h
 #define unit_h
 
-#include "standard.h"
+#include "../student/std.h"
 
-typedef struct unity uni_t;
-typedef struct unit unilink_t;
+typedef struct unity ue_t;
+typedef struct unit elink_t;
+typedef struct etab etable_t;
 
 struct unity {
     char *id;
-    char *level;
     char *code;
+    dp_t *dp;
+    int grade;
     char weight;
 };
 
 struct unit {
-    uni_t *unit;
+    char *key;
+    ue_t *unit;
     struct unit *next;
 };
 
-size_t unicount(unilink_t **head);
-void unishow(unilink_t **head, char *id);
-bool unadd(unilink_t **head, uni_t *ue);
-bool unipdate(unilink_t **head, uni_t *modified, char *id);
-bool unidel(unilink_t **head, char *id);
-bool uniremove(unilink_t **head, char **ids, bool *func(unilink_t **head, char *id));
+struct etab {
+    elink_t *unity;
+    struct etab *next;
+};
+
 
 #endif

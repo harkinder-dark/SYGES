@@ -165,7 +165,7 @@ bool faculty_add(ftable_t **db, char *key, fac_t *fac)
 bool faculty_update(ftable_t **db, char *key, fac_t *modified, char *id)
 {
     ftable_t *cur;
-    if (!modified)
+    if (!modified || !key)
         return false;
     
     if (!db || !(*db))

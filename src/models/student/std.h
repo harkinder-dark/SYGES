@@ -36,12 +36,10 @@ struct stables {
 };
 
 
-size_t sd_count(stable_t **db, char *key);
+size_t study_count(stable_t **db, char *key);
 void shortStudPrint(std_t *study);
-void sd_show(stable_t **db, char *key, char *id);
-bool stadd(stdlink_t **head, std_t *dp);
-bool sdupdate(stdlink_t **head, std_t *modified, char *id);
-bool stdel(stdlink_t **head, char *id);
-bool stdremove(stdlink_t **head, char **ids, bool *func(stdlink_t **head, char *id));
+void study_show(stable_t **db, char *key, char *id);
+bool study_add(stable_t **db, char *key, std_t *study);
+bool study_update(stable_t **db, char *key, std_t *modified, char *id);
 
 #endif

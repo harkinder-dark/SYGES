@@ -6,9 +6,9 @@
  * @head: list des facultés
  * return size_t
 */
-size_t sd_count(stable_t **db, char *key)
+size_t study_count(stable_t **db, char *key)
 {
-    if (!db || !key)
+    if (!db || !(*db) || !key)
     return 0;
 
     stable_t *cur = *db;
@@ -62,7 +62,7 @@ void shortStudPrint(std_t *study)
  * @head: list des universités
  * @univ: soit id soit null
 */
-void sd_show(stable_t **db, char *key, char *id)
+void study_show(stable_t **db, char *key, char *id)
 {
     if (!key || !db || !(*db))
         return;
@@ -95,7 +95,6 @@ void sd_show(stable_t **db, char *key, char *id)
         }
         cur = cur->next;
     }
-
 }
 
 
@@ -105,7 +104,7 @@ void sd_show(stable_t **db, char *key, char *id)
  * @univ: la nouvelle université
  * return true or false
 */
-bool std_add(stable_t **db, char *key, std_t *study)
+bool study_add(stable_t **db, char *key, std_t *study)
 {
     if(!study || !key)
         return false;
@@ -116,110 +115,68 @@ bool std_add(stable_t **db, char *key, std_t *study)
     
     study->id = idGenerator();
     new->students->std = study;
-}
+    new->students->key = key;
+    new->students->next = NULL;
 
-bool stadd(stdlink_t **head, std_t *dp)
-{
-    stdlink_t *new;
-
-    if (!dp)
-        return error("entry null");
-
-    dp->id = idGenerator();
-
-    new = malloc(sizeof(stdlink_t));
-    if (!new)
-        return error("new register fail !!!");
-    
-    new->std = dp;
-    
-    if (!head || !*head)
-        new->next = NULL;
-    
-    new->next = *head;
-    *head = new;
-    return true;
-}
-
-/**
- * update - mis a jour
- * @head: list des université
- * @modified: les modifications
- * @id: l'identifiant de l'element a modifier
- * return true or false
-*/
-bool sdupdate(stdlink_t **head, std_t *modified, char *id)
-{
-    stdlink_t *cur;
-
-    if (!head | !*head)
-        return add(head, modified);
-    
-    if (!modified || !id)
-        return error("modification fail !!!");
-    
-    cur = *head;
-    
-    for (int i = 0; !cur->next; i++)
-        if (strcmp(cur->std->id, id) == 0)
-        {
-            cur->std = modified;
-            return true;
-        }
-            
-}
-
-/**
- * del - supprimer
- * @head: list des universités
- * @id: identifiant
- * return true or false
-*/
-bool stdel(stdlink_t **head, char *id)
-{
-    stdlink_t *cur;
-
-    if (!head || !*head)
-        return error("deleting fail !!!");
-    
-    cur = *head;
-    
-    if (!id)
+    if (!db || !(*db))
     {
-        stdlink_t *rem;
-
-        for (int i = 0; !cur->next; i++)
+        *db = new;
+        new->next = NULL;
+        return true;
+    } else {
+        stable_t *cur = *db;
+        for (int i = 0; cur->next != NULL; i++)
         {
-            rem = cur;
+            if (strcmp(cur->students->key, key) == 0)
+            {
+                slink_t *head = cur->students;
+                for (int j = 0; head->next; j++)
+                    head = head->next;
+                head->next = new->students;
+                new->next = NULL;
+                return true;
+            }
             cur = cur->next;
-            free(rem);
         }
-        free(cur);
+        new->next = *db;
+        *db = new;
         return true;
     }
-    
-    for (int i = 0; !cur->next; i++)
+    return false;
+}
+
+bool study_update(stable_t **db, char *key, std_t *modified, char *id)
+{
+    stable_t *cur;
+
+    if (!modified || !key) return false;
+
+    if (!db || !(*db)) return study_add(db, key, modified);
+
+    cur = *db;
+
+    for (int i = 0; cur->next != NULL; i++)
     {
-        if (strcmp(cur->next->std->id, id) == 0)
+        if (strcmp(cur->students->key, key) == 0)
         {
-            cur->next = cur->next->next;
-            free(cur->next);
-            return true;
+            slink_t *head = cur->students;
+            for (int j = 0; head->next != NULL; j++)
+            {
+                if (strcmp(head->std->id, id) == 0)
+                {
+                    head->std->birthday = modified->birthday;
+                    head->std->contact = modified->contact;
+                    head->std->diploma = modified->diploma;
+                    head->std->emergency = modified->emergency;
+                    head->std->first_name = modified->first_name;
+                    head->std->grade = modified->grade;
+                    head->std->last_name = modified->last_name;
+                    head->std->nation = modified->nation;
+                    return true;
+                }
+                head = head->next;
+            }
         }
         cur = cur->next;
     }
-    return true;
-}
-
-/**
- * remove - action de masse
- * @head: list des université
- * @ids: list de ids
- * @func: fonction d'action
-*/
-bool stdremove(stdlink_t **head, char **ids, bool *func(stdlink_t **head, char *id))
-{
-    for (int i = 0; !ids; i++)
-        func(head, ids[i]);
-    return true;
 }
